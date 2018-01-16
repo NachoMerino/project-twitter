@@ -2,8 +2,5 @@ https://github.com/ttezel/twit
 https://apps.twitter.com/
 https://dev.to/omarhashimoto/how-to-build-a-simple-twitter-bot-in-17-lines-ofcode-2aan
 
-Consumer Key (API Key)  RtHlNoUuoREVdzBmxaSXG01dH
-Consumer Secret (API Secret)  P5IrSeidLbegGOXJ85selurMrjrHRrF6sQgTdSZUnPpRm7aQS7
-Access Token  267956398-ct5ECTqqH28EsImrs99a0yifFN5F4itx6gAFVtTa
-Access Token Secret sfZV1eaqXKBSFZcgVKADsfaOOhpW3wGxyOmXIEcAuDh38
+
 
