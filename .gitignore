@@ -1,2 +1,3 @@
-# ignore an entire directory
-/documentacion/
+# Untracked files:
+
+./qdocumentacion/documentation.txt

@@ -4,12 +4,7 @@ const fs = require('fs');
 
 // timing to check if is the right pst time
 const timing = 55000;
-/*
-const TelegramBot = require('node-telegram-bot-api');
-// tg321bot
-// replace the value below with the Telegram token you receive from @BotFather
-const token = '462645542:AAFymq4AkEz_zsySfKjNIDz5CScFAh5buQI';
-*/
+
 console.log('Twitter Bot activated...');
 let osFolder = process.env.HOME + '/.twitter-conf';
 let statusConfig = null;
@@ -34,9 +29,9 @@ const T = new Twit({
   access_token: statusConfig.access_token,
   access_token_secret: statusConfig.access_token_secret,
 });
-// Contain the ids of the users we wanna retweet /tecnogeekies y /DevFromScratch
-/*
-const users = ['3548228416', '634401203'];
+// Contain the ids of the users we wanna retweet /saxoncorp y /DevFromScratch
+
+const users = ['267956398'];
 const stream = T.stream('statuses/filter', { follow: users });
 stream.on('tweet', (tweet) => {
   if (users.indexOf(tweet.user.id_str) > -1) {
@@ -46,7 +41,7 @@ stream.on('tweet', (tweet) => {
     })
   }
 })
-*/
+
 // program to read all the pictures
 
 let pictures = {
@@ -282,6 +277,7 @@ const phrMor = {
   hashtags: [],
 }
 */
+/*
 setInterval(() => { // Set interval for checking
   var date = new Date(); // Create a Date object to find out what time it is
   if (date.getHours() === 8 && date.getMinutes() === 02) { // Check the time
@@ -333,7 +329,7 @@ setInterval(() => { // Set interval for checking
     })
   }
 }, timing);
-
+*/
 // Weekly publish telegram chat
 
 setInterval(() => { // Set interval for checking
