@@ -4,12 +4,7 @@ const fs = require('fs');
 
 // timing to check if is the right pst time
 const timing = 55000;
-/*
-const TelegramBot = require('node-telegram-bot-api');
-// tg321bot
-// replace the value below with the Telegram token you receive from @BotFather
-const token = '462645542:AAFymq4AkEz_zsySfKjNIDz5CScFAh5buQI';
-*/
+
 console.log('Twitter Bot activated...');
 let osFolder = process.env.HOME + '/.twitter-conf';
 let statusConfig = null;
