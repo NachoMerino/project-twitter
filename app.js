@@ -85,7 +85,7 @@ listFiles('./pictures');
 function getRnd(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
-/*
+
 // MORNING SENTENCES
 const phrMor = {
   start: [
@@ -124,7 +124,7 @@ const phrMor = {
     '#felizdomingo',
   ],
 }
-*/
+
 /*
 // EATING SENTENCES
 const phrMor = {
@@ -277,10 +277,10 @@ const phrMor = {
   hashtags: [],
 }
 */
-/*
+
 setInterval(() => { // Set interval for checking
   var date = new Date(); // Create a Date object to find out what time it is
-  if (date.getHours() === 8 && date.getMinutes() === 02) { // Check the time
+  if (date.getHours() === 8 && date.getMinutes() === 02) {// Check the time
     const num = getRnd(0, pictures.morning.length);
     // START post a tweet with media
     var b64content = fs.readFileSync(`./pictures/morning/${pictures.morning[num]}`, { encoding: 'base64' });
@@ -329,7 +329,7 @@ setInterval(() => { // Set interval for checking
     })
   }
 }, timing);
-*/
+
 // Weekly publish telegram chat
 
 setInterval(() => { // Set interval for checking
