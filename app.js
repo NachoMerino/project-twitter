@@ -1,9 +1,10 @@
 // request to twitter
 const Twit = require('twit');
 const fs = require('fs');
+const fetch = require('node-fetch');
 
 // timing to check if is the right pst time
-const timing = 55000;
+const timing = 55000; // 55 seconds
 
 console.log('Twitter Bot activated...');
 let osFolder = process.env.HOME + '/.twitter-conf';
@@ -15,6 +16,7 @@ if (!fs.existsSync(osFolder)) {
     consumer_secret: '',
     access_token: '',
     access_token_secret: '',
+    youtube_key: ''
   }
   fs.writeFileSync(osFolder + '/.config.json', JSON.stringify(initialConfig));
   console.log('The config folder does not exist, it has been created now. The server will exit now');
@@ -280,7 +282,72 @@ const phrMor = {
 
 setInterval(() => { // Set interval for checking
   var date = new Date(); // Create a Date object to find out what time it is
-  if (date.getHours() === 8 && date.getMinutes() === 02) {// Check the time
+  let weekDay = date.getDay();
+
+  // Daily publish phrase
+
+    if (date.getHours() === 19 && date.getMinutes() === 08) { // Check the time
+      // START post a tweet with media
+      var b64content = fs.readFileSync('./pictures/regular-publications/tg-picture.jpg', { encoding: 'base64' });
+      // first we must post the media to Twitter
+      T.post('media/upload', { media_data: b64content }, (err, data, response) => {
+        // now we can assign alt text to the media, for use by screen readers and
+        // other text-based presentations and interpreters
+        var mediaIdStr = data.media_id_string
+        var altText = "Script made by nachomerino to tecnogeekies"
+        var meta_params = { media_id: mediaIdStr, alt_text: { text: altText } }
+
+        T.post('media/metadata/create', meta_params, (err, data, response) => {
+          if (!err) {
+            // now we can reference the media and post a tweet (media will attach to the tweet)
+            var params = { status: `${phrFreak.start[getRnd(0, phrFreak.start.length)]} ${phrFreak.middle[getRnd(0, phrFreak.middle.length)]} ${phrFreak.closing[getRnd(0, phrFreak.closing.length)]} ${phrFreak.hashtags[0]}`, media_ids: [mediaIdStr] }
+
+            T.post('statuses/update', params, (err, data, response) => {
+              console.log('Tweet posted with the following text:', data.text);
+            })
+          }
+        })
+      })
+    }
+
+  // Daily adverteisment of the last YT video
+
+    if (date.getHours() === 22 && date.getMinutes() === 27) { // Check the time
+    // load the lastest info about our yt channel
+    fetch(`https://www.googleapis.com/youtube/v3/search?key=${statusConfig.youtube_key}&channelId=UCKY9eC8A95wxeXt8PaqvMlw&part=snippet,id&order=date&maxResults=1`)
+    .then(res => res.json())
+    .then(videoInfo => {
+      // now we can reference the media and post a tweet (media will attach to the tweet)
+      var params = { status: `¿Viste ya nuestro último vídeo? ${videoInfo.items[0].snippet.description} http://www.youtube.com/watch?v=${videoInfo.items[0].id.videoId}`}
+
+      T.post('statuses/update', params, (err, data, response) => {
+        console.log('Tweet posted with the following text:', data.text);
+      })
+    })
+  }
+
+    // Daily adverteisment of a random YT video
+
+    if (date.getHours() === 15 && date.getMinutes() === 49) { // Check the time
+    // load the lastest info about our yt channel
+    let num = getRnd(1, 50);
+    fetch(`https://www.googleapis.com/youtube/v3/search?key=${statusConfig.youtube_key}&channelId=UCKY9eC8A95wxeXt8PaqvMlw&part=snippet,id&order=date&maxResults=50`)
+    .then(res => res.json())
+    .then(videoInfo => {
+      const desc = videoInfo.items[num].snippet.description
+      if(desc.match('TheGeekShow')){
+        num = num + 1
+      }
+      // now we can reference the media and post a tweet (media will attach to the tweet)
+      var params = { status: `Creemos que este video puede gustarte. ${videoInfo.items[num].snippet.description} http://www.youtube.com/watch?v=${videoInfo.items[num].id.videoId} #TGHemeroteca`}
+
+      T.post('statuses/update', params, (err, data, response) => {
+        console.log('Tweet posted with the following text:', data.text);
+      })
+    })
+  }
+
+    if (date.getHours() === 8 && date.getMinutes() === 02) {// Check the time
     const num = getRnd(0, pictures.morning.length);
     // START post a tweet with media
     var b64content = fs.readFileSync(`./pictures/morning/${pictures.morning[num]}`, { encoding: 'base64' });
@@ -295,32 +362,8 @@ setInterval(() => { // Set interval for checking
       T.post('media/metadata/create', meta_params, (err, data, response) => {
         if (!err) {
           // hastag for each day of the week '#felizweekDay'
-          let weekDay = date.getDay();
-          let dayHashTag;
-          switch (weekDay) {
-            case 1:
-              dayHashTag = phrMor.hashtags[0];
-              break;
-            case 2:
-              dayHashTag = phrMor.hashtags[1];
-              break;
-            case 3:
-              dayHashTag = phrMor.hashtags[2];
-              break;
-            case 4:
-              dayHashTag = phrMor.hashtags[3];
-              break;
-            case 5:
-              dayHashTag = phrMor.hashtags[4];
-              break;
-            case 6:
-              dayHashTag = phrMor.hashtags[5];
-              break;
-            default:
-              dayHashTag = phrMor.hashtags[6];
-          }
           // now we can reference the media and post a tweet (media will attach to the tweet)
-          var params = { status: `${phrMor.start[getRnd(0, phrMor.start.length)]} ${phrMor.closing[getRnd(0, phrMor.closing.length)]} ${dayHashTag}`, media_ids: [mediaIdStr] }
+          var params = { status: `${phrMor.start[getRnd(0, phrMor.start.length)]} ${phrMor.closing[getRnd(0, phrMor.closing.length)]} ${phrMor.hashtags[weekDay - 1]}`, media_ids: [mediaIdStr] }
 
           T.post('statuses/update', params, (err, data, response) => {
             console.log('Tweet posted with the following text:', data.text);
@@ -329,14 +372,9 @@ setInterval(() => { // Set interval for checking
       })
     })
   }
-}, timing);
+  // Weekly publish telegram chat (martes y sabado)
 
-// Weekly publish telegram chat
-
-setInterval(() => { // Set interval for checking
-  var date = new Date(); // Create a Date object to find out what time it is
-  if ((date.getDay() === 6 || date.getDay() === 2) && date.getHours() === 12 && date.getMinutes() === 39) {
-  console.log('Weekly publish telegram chat') // Check the time
+    if ((weekDay === 6 || weekDay === 2) && date.getHours() === 12 && date.getMinutes() === 39) {
     // START post a tweet with media
     var b64content = fs.readFileSync('./pictures/regular-publications/telegram.png', { encoding: 'base64' });
     // first we must post the media to Twitter
@@ -351,35 +389,6 @@ setInterval(() => { // Set interval for checking
         if (!err) {
           // now we can reference the media and post a tweet (media will attach to the tweet)
           var params = { status: `¡Tenemos un grupo de Telegram! ¿Te animas a entrar? Hablamos de hardware, software, resolvemos dudas y muchas otras cosas más. LINK: https://t.me/joinchat/CTROOguyCbY3nx-g8-kxYQ`, media_ids: [mediaIdStr] }
-
-          T.post('statuses/update', params, (err, data, response) => {
-            console.log('Tweet posted with the following text:', data.text);
-          })
-        }
-      })
-    })
-  }
-}, timing);
-
-// Daily publish phrase
-
-setInterval(() => { // Set interval for checking
-  var date = new Date(); // Create a Date object to find out what time it is
-  if (date.getHours() === 19 && date.getMinutes() === 08) { // Check the time
-    // START post a tweet with media
-    var b64content = fs.readFileSync('./pictures/regular-publications/tg-picture.jpg', { encoding: 'base64' });
-    // first we must post the media to Twitter
-    T.post('media/upload', { media_data: b64content }, (err, data, response) => {
-      // now we can assign alt text to the media, for use by screen readers and
-      // other text-based presentations and interpreters
-      var mediaIdStr = data.media_id_string
-      var altText = "Script made by nachomerino to tecnogeekies"
-      var meta_params = { media_id: mediaIdStr, alt_text: { text: altText } }
-
-      T.post('media/metadata/create', meta_params, (err, data, response) => {
-        if (!err) {
-          // now we can reference the media and post a tweet (media will attach to the tweet)
-          var params = { status: `${phrFreak.start[getRnd(0, phrFreak.start.length)]} ${phrFreak.middle[getRnd(0, phrFreak.middle.length)]} ${phrFreak.closing[getRnd(0, phrFreak.closing.length)]} ${phrFreak.hashtags[0]}`, media_ids: [mediaIdStr] }
 
           T.post('statuses/update', params, (err, data, response) => {
             console.log('Tweet posted with the following text:', data.text);
