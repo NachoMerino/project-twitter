@@ -295,31 +295,32 @@ setInterval(() => { // Set interval for checking
       T.post('media/metadata/create', meta_params, (err, data, response) => {
         if (!err) {
           // hastag for each day of the week '#felizweekDay'
-          let weekDay = now.getDay();
+          let weekDay = date.getDay();
+          let dayHashTag;
           switch (weekDay) {
             case 1:
-              weekDay = phrMor.hashtags[0];
+              dayHashTag = phrMor.hashtags[0];
               break;
             case 2:
-              weekDay = phrMor.hashtags[1];
+              dayHashTag = phrMor.hashtags[1];
               break;
             case 3:
-              weekDay = phrMor.hashtags[2];
+              dayHashTag = phrMor.hashtags[2];
               break;
             case 4:
-              weekDay = phrMor.hashtags[3];
+              dayHashTag = phrMor.hashtags[3];
               break;
             case 5:
-              weekDay = phrMor.hashtags[4];
+              dayHashTag = phrMor.hashtags[4];
               break;
             case 6:
-              weekDay = phrMor.hashtags[5];
+              dayHashTag = phrMor.hashtags[5];
               break;
             default:
-              weekDay = phrMor.hashtags[6];
+              dayHashTag = phrMor.hashtags[6];
           }
           // now we can reference the media and post a tweet (media will attach to the tweet)
-          var params = { status: `${phrMor.start[getRnd(0, phrMor.start.length)]} ${phrMor.middle[getRnd(0, phrMor.middle.length)]} ${phrMor.closing[getRnd(0, phrMor.closing.length)]} ${weekDay}`, media_ids: [mediaIdStr] }
+          var params = { status: `${phrMor.start[getRnd(0, phrMor.start.length)]} ${phrMor.closing[getRnd(0, phrMor.closing.length)]} ${dayHashTag}`, media_ids: [mediaIdStr] }
 
           T.post('statuses/update', params, (err, data, response) => {
             console.log('Tweet posted with the following text:', data.text);
@@ -334,7 +335,8 @@ setInterval(() => { // Set interval for checking
 
 setInterval(() => { // Set interval for checking
   var date = new Date(); // Create a Date object to find out what time it is
-  if (date.getDay() === 2 && date.getHours() === 12 && date.getMinutes() === 25) { // Check the time
+  if ((date.getDay() === 6 || date.getDay() === 2) && date.getHours() === 12 && date.getMinutes() === 39) {
+  console.log('Weekly publish telegram chat') // Check the time
     // START post a tweet with media
     var b64content = fs.readFileSync('./pictures/regular-publications/telegram.png', { encoding: 'base64' });
     // first we must post the media to Twitter
@@ -348,7 +350,7 @@ setInterval(() => { // Set interval for checking
       T.post('media/metadata/create', meta_params, (err, data, response) => {
         if (!err) {
           // now we can reference the media and post a tweet (media will attach to the tweet)
-          var params = { status: `¡Tenemos un grupo de Telegram! ¿Te animas a entrar? Hablamos de hardware, software, resolvemos dudas y muchas cosas más. LINK: https://t.me/joinchat/CTROOguyCbY3nx-g8-kxYQ`, media_ids: [mediaIdStr] }
+          var params = { status: `¡Tenemos un grupo de Telegram! ¿Te animas a entrar? Hablamos de hardware, software, resolvemos dudas y muchas otras cosas más. LINK: https://t.me/joinchat/CTROOguyCbY3nx-g8-kxYQ`, media_ids: [mediaIdStr] }
 
           T.post('statuses/update', params, (err, data, response) => {
             console.log('Tweet posted with the following text:', data.text);
@@ -363,7 +365,7 @@ setInterval(() => { // Set interval for checking
 
 setInterval(() => { // Set interval for checking
   var date = new Date(); // Create a Date object to find out what time it is
-  if (date.getHours() === 19 && date.getMinutes() === 03) { // Check the time
+  if (date.getHours() === 19 && date.getMinutes() === 08) { // Check the time
     // START post a tweet with media
     var b64content = fs.readFileSync('./pictures/regular-publications/tg-picture.jpg', { encoding: 'base64' });
     // first we must post the media to Twitter
