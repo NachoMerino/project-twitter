@@ -2,9 +2,6 @@
 const Twit = require('twit');
 const fs = require('fs');
 const fetch = require('node-fetch');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const Gmail = require('node-gmail-api');
 // MORNING SENTENCES
 const phrMor = require('./phrases/phrMor');
 // RANDOM PHRASES
@@ -222,8 +219,4 @@ setInterval(() => { // Set interval for checking
 
 //statusConfig.youtube_key
 setInterval(() => {console.log('gmail runs!')
-  fetch('https://www.googleapis.com/gmail/v1/users/me/messages?q="in:sent after:2014/01/01 before:2014/01/30')
-    .then(res => res.json())
-    .then(mails => {console.log(mails)})
-
 }, 300000);
